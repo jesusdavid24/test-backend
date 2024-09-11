@@ -4,7 +4,20 @@ import { type ArrivalLogs } from './arrival.type';
 const prisma = new PrismaClient();
 
 export async function getAllArrival() {
-  const arrival = await prisma.arrivalLogs.findMany();
+  const arrival = await prisma.arrivalLogs.findMany({
+    select:{
+      id: true,
+      arrival_time: true,
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+        }
+      }
+    }
+  });
   return arrival;
 }
 

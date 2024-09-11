@@ -3,11 +3,11 @@ import { type User } from './user.type'
 import errorHandler from '@utils/errorHandler';
 
 import {
-  getAllUser,
-  getById,
-  getUserByEmail,
   create,
+  getById,
   destroy,
+  getAllUser,
+  getUserByEmail,
   put
 } from './user.service';
 
@@ -44,7 +44,10 @@ export async function getUserById(req: Request, res: Response) {
 export async function createUser(req: Request, res: Response) {
   try {
     const data: User = req.body;
+    const email = await getUserByEmail(data.email);
 
+    if (email) throw new Error('Email already exists');
+      
     const user = await create(data);
     return res.status(201).json(user)
   } catch (exception: unknown) {

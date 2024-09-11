@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import passport from 'passport';
 import { checkRole } from '@middleware/verifyRole';
+import { validateSchema } from '@middleware/schemaValidator';
+import { UserSchema } from '@schema/user.schema';
 
 import {
   getUsers,
@@ -27,6 +29,7 @@ router.get(
 );
 
 router.post('/',
+  validateSchema(UserSchema),
   passport.authenticate('jwt', { session: false }),
   checkRole('ADMIN'), 
   createUser
